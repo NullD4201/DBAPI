@@ -1,0 +1,15 @@
+Dev_Mode: true
+Dev:
+  host: localhost
+  port: 3306
+  database: db
+  table: JoinQuit
+  user: username
+  password: password
+Release:
+  host: localhost
+  port: 3306
+  database: db
+  table: JoinQuit
+  user: username
+  password: password

@@ -1,0 +1,7 @@
+name: Libibkk_DBAPI
+version: '${project.version}'
+main: com.github.nulld4201.libibkk_dbapi.Main
+api-version: 1.18
+prefix: LIBIBKK-DBAPI
+authors: [ Null_D ]
+description: SPIGOT PLUGIN FOR LIBIBKK SERVER DATABASE
