@@ -8,13 +8,15 @@ import java.io.File;
 import java.sql.SQLException;
 
 public class Main extends JavaPlugin {
-    public static File configFile = new File(getPlugin(Main.class).getDataFolder(), "dbconfig.yml");;
+    public static File configFile;
 //    public static final Plugin plugin = getPlugin(Main.class);
     private DatabaseSetting dbs;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
+        configFile = new File(getPlugin(this.getClass()).getDataFolder(), "dbconfig.yml");
+
         if (!configFile.exists()) saveResource(configFile.getName(), false);
 
         this.dbs = new DatabaseSetting();
