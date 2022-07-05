@@ -15,7 +15,7 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        configFile = new File(getPlugin(this.getClass()).getDataFolder(), "dbconfig.yml");
+        configFile = new File("./plugins/Libibkk_DBAPI", "dbconfig.yml");
 
         if (!configFile.exists()) saveResource(configFile.getName(), false);
 
