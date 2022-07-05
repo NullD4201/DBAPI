@@ -13,38 +13,38 @@ public class DBConfig{
         return configYaml.getBoolean("Dev_Mode");
     }
 
-    public static String getServerHost(DBType type) {
-        String typeName = type.getTypeName();
+    public static String getServerHost() {
+        String typeName = "Release";
         if (isDevMode()) typeName = "Dev";
         return configYaml.getString(typeName + ".host");
     }
 
-    public static int getServerPort(DBType type) {
-        String typeName = type.getTypeName();
+    public static int getServerPort() {
+        String typeName = "Release";
         if (isDevMode()) typeName = "Dev";
         return configYaml.getInt(typeName + ".port");
     }
 
-    public static String getServerDB(DBType type) {
-        String typeName = type.getTypeName();
+    public static String getServerDB() {
+        String typeName = "Release";
         if (isDevMode()) typeName = "Dev";
         return configYaml.getString(typeName + ".database");
     }
 
-    public static String getServerDBTable(DBType type) {
-        String typeName = type.getTypeName();
+    public static String getServerDBTable() {
+        String typeName = "Release";
         if (isDevMode()) typeName = "Dev";
         return configYaml.getString(typeName + ".table");
     }
 
-    public static String getServerUsername(DBType type) {
-        String typeName = type.getTypeName();
+    public static String getServerUsername() {
+        String typeName = "Release";
         if (isDevMode()) typeName = "Dev";
         return configYaml.getString(typeName + ".user");
     }
 
-    public static String getServerPassword(DBType type) {
-        String typeName = type.getTypeName();
+    public static String getServerPassword() {
+        String typeName = "Release";
         if (isDevMode()) typeName = "Dev";
         return configYaml.getString(typeName + ".password");
     }

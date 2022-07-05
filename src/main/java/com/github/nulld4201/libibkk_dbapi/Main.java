@@ -2,22 +2,30 @@ package com.github.nulld4201.libibkk_dbapi;
 
 import com.github.nulld4201.libibkk_dbapi.database.DBType;
 import com.github.nulld4201.libibkk_dbapi.database.DatabaseSetting;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class Main extends JavaPlugin {
-    public static File configFile;
 //    public static final Plugin plugin = getPlugin(Main.class);
     private DatabaseSetting dbs;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
-        configFile = new File("./plugins/Libibkk_DBAPI", "dbconfig.yml");
+        File configFile = new File("./plugins/Libibkk_DBAPI", "dbconfig.yml");
+        YamlConfiguration configYml = YamlConfiguration.loadConfiguration(configFile);
 
-        if (!configFile.exists()) saveResource(configFile.getName(), false);
+        if (!configFile.exists()) {
+            try {
+                configYml.save(configFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         this.dbs = new DatabaseSetting();
         try {

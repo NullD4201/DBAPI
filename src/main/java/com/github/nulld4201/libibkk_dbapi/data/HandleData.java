@@ -8,6 +8,9 @@ import com.github.nulld4201.libibkk_dbapi.database.DatabaseSetting;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class HandleData {
 
@@ -19,17 +22,15 @@ public class HandleData {
 
     /**
      * UUID로 유저데이터 불러옴.
-     * @param type 데이터베이스 종류
-     *             (Dev인지, Release인지. 만약 dbconfig 내 Dev_Mode가 true일 경우 값에 관계없이 항상 Dev)
      * @param uuid 유저 UUID
      *             (데이터베이스 내 UUID를 검색하여 UserData return. 검색 결과가 없으면 null return.
      * @return UserData 반환. 이에 대한 부분은 알 필요 없음. 별도 메서드로 각각의 값 반환.
      */
-    private UserData getUserByUUID(@Nonnull DBType type, @Nonnull String uuid) {
+    private UserData getUserByUUID(@Nonnull String uuid) {
         try {
-            this.db.connect(type);
+            this.db.connect();
             Connection conn = this.db.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM " + DBConfig.getServerDBTable(type) + " WHERE UUID=?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM " + DBConfig.getServerDBTable() + " WHERE UUID=?");
 
             stmt.setString(1, uuid);
 
@@ -60,12 +61,38 @@ public class HandleData {
         return null;
     }
 
-    public void addUser(@Nonnull DBType type, @Nonnull String uuid, long cash, @Nullable Timestamp joinTime, @Nullable Timestamp quitTime) {
-        if (getUserByUUID(type, uuid) == null) {
+    public List<String> getAllUsers() {
+        List<String> list = new ArrayList<>();
+        try {
+            this.db.connect();
+            Connection conn = this.db.getConnection();
+            PreparedStatement stmt = conn.prepareStatement("SELECT ALL UUID FROM " + DBConfig.getServerDBTable() + " WHERE TRUE");
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String UUID = rs.getString("UUID");
+                list.add(UUID);
+                return list;
+            } else {
+                Main.getPlugin(Main.class).getLogger().warning("No UserData!");
+                rs.close();
+                stmt.close();
+                this.db.disconnect();
+                return new ArrayList<>();
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    public void addUser(@Nonnull String uuid, long cash, @Nullable Timestamp joinTime, @Nullable Timestamp quitTime) {
+        if (getUserByUUID(uuid) == null) {
             try {
-                this.db.connect(type);
+                this.db.connect();
                 Connection conn = this.db.getConnection();
-                PreparedStatement stmt = conn.prepareStatement("INSERT INTO " + DBConfig.getServerDBTable(type) + "(UUID, Cash, JoinTime, QuitTime) values (?, ?, ?, ?)");
+                PreparedStatement stmt = conn.prepareStatement("INSERT INTO " + DBConfig.getServerDBTable() + "(UUID, Cash, JoinTime, QuitTime) values (?, ?, ?, ?)");
 
                 stmt.setString(1, uuid);
                 stmt.setLong(2, cash);
@@ -85,15 +112,15 @@ public class HandleData {
         }
     }
 
-    public void addCashToUser(@Nonnull DBType type, @Nonnull String uuid, long cashToAdd) {
-        UserData userData = getUserByUUID(type, uuid);
+    public void addCashToUser(@Nonnull String uuid, long cashToAdd) {
+        UserData userData = getUserByUUID(uuid);
         if (userData != null) {
             long currentCash = userData.getUserCash();
             long afterCash = currentCash + cashToAdd;
             try {
-                this.db.connect(type);
+                this.db.connect();
                 Connection conn = this.db.getConnection();
-                PreparedStatement stmt = conn.prepareStatement("UPDATE " + DBConfig.getServerDBTable(type) + " SET UUID=?, Cash=?, JoinTime=?, QuitTime=? WHERE idx=?");
+                PreparedStatement stmt = conn.prepareStatement("UPDATE " + DBConfig.getServerDBTable() + " SET UUID=?, Cash=?, JoinTime=?, QuitTime=? WHERE idx=?");
                 stmt.setString(1, userData.getUserUUID());
                 stmt.setLong(2, afterCash);
                 stmt.setTimestamp(3, userData.getUserJoinTime());
@@ -112,13 +139,13 @@ public class HandleData {
         }
     }
 
-    public void setUserJoinTime_Timestamp(@Nonnull DBType type, @Nonnull String uuid, @Nullable Timestamp timestamp) {
-        UserData userData = getUserByUUID(type, uuid);
+    public void setUserJoinTime_Timestamp(@Nonnull String uuid, @Nullable Timestamp timestamp) {
+        UserData userData = getUserByUUID(uuid);
         if (userData != null) {
             try {
-                this.db.connect(type);
+                this.db.connect();
                 Connection conn = this.db.getConnection();
-                PreparedStatement stmt = conn.prepareStatement("UPDATE " + DBConfig.getServerDBTable(type) + " SET UUID=?, Cash=?, JoinTime=?, QuitTime=? WHERE idx=?");
+                PreparedStatement stmt = conn.prepareStatement("UPDATE " + DBConfig.getServerDBTable() + " SET UUID=?, Cash=?, JoinTime=?, QuitTime=? WHERE idx=?");
                 stmt.setString(1, userData.getUserUUID());
                 stmt.setLong(2, userData.getUserCash());
                 stmt.setTimestamp(3, timestamp);
@@ -137,17 +164,13 @@ public class HandleData {
         }
     }
 
-    public void setUserJoinTime_FormattedString(@Nonnull DBType type, @Nonnull String uuid, String formatString) {
-        setUserJoinTime_Timestamp(type, uuid, Timestamp.valueOf(formatString));
-    }
-
-    public void setUserQuitTime_Timestamp(@Nonnull DBType type, @Nonnull String uuid, @Nonnull Timestamp timestamp) {
-        UserData userData = getUserByUUID(type, uuid);
+    public void setUserQuitTime_Timestamp(@Nonnull String uuid, @Nonnull Timestamp timestamp) {
+        UserData userData = getUserByUUID(uuid);
         if (userData != null) {
             try {
-                this.db.connect(type);
+                this.db.connect();
                 Connection conn = this.db.getConnection();
-                PreparedStatement stmt = conn.prepareStatement("UPDATE " + DBConfig.getServerDBTable(type) + " SET UUID=?, Cash=?, JoinTime=?, QuitTime=? WHERE idx=?");
+                PreparedStatement stmt = conn.prepareStatement("UPDATE " + DBConfig.getServerDBTable() + " SET UUID=?, Cash=?, JoinTime=?, QuitTime=? WHERE idx=?");
                 stmt.setString(1, userData.getUserUUID());
                 stmt.setLong(2, userData.getUserCash());
                 stmt.setTimestamp(3, userData.getUserJoinTime());
@@ -164,9 +187,5 @@ public class HandleData {
         } else {
             Main.getPlugin(Main.class).getLogger().warning("User not found!");
         }
-    }
-
-    public void setUserQuitTime_FormattedString(@Nonnull DBType type, @Nonnull String uuid, String formatString) {
-        setUserQuitTime_Timestamp(type, uuid, Timestamp.valueOf(formatString));
     }
 }

@@ -16,11 +16,11 @@ public class DatabaseSetting {
         return (connection != null);
     }
 
-    public void connect(DBType type) throws ClassNotFoundException, SQLException {
+    public void connect() throws ClassNotFoundException, SQLException {
         Class.forName("org.mariadb.jdbc.Driver");
         connection = DriverManager.getConnection(
-                "jdbc:mariadb://" + DBConfig.getServerHost(type) + ":" + DBConfig.getServerPort(type) + "/" + DBConfig.getServerDB(type),
-                DBConfig.getServerUsername(type), DBConfig.getServerPassword(type));
+                "jdbc:mariadb://" + DBConfig.getServerHost() + ":" + DBConfig.getServerPort() + "/" + DBConfig.getServerDB(),
+                DBConfig.getServerUsername(), DBConfig.getServerPassword());
     }
 
     public void disconnect() {
