@@ -1,8 +1,6 @@
 package com.github.nulld4201.libibkk_dbapi.data;
 
-import com.github.nulld4201.libibkk_dbapi.Main;
 import com.github.nulld4201.libibkk_dbapi.database.DBConfig;
-import com.github.nulld4201.libibkk_dbapi.database.DBType;
 import com.github.nulld4201.libibkk_dbapi.database.DatabaseSetting;
 
 import javax.annotation.Nonnull;
@@ -10,7 +8,6 @@ import javax.annotation.Nullable;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class HandleData {
 
@@ -49,7 +46,6 @@ public class HandleData {
                 this.db.disconnect();
                 return userData;
             } else {
-                Main.getPlugin(Main.class).getLogger().warning("User not found!");
                 rs.close();
                 stmt.close();
                 this.db.disconnect();
@@ -75,7 +71,6 @@ public class HandleData {
                 list.add(UUID);
                 return list;
             } else {
-                Main.getPlugin(Main.class).getLogger().warning("No UserData!");
                 rs.close();
                 stmt.close();
                 this.db.disconnect();
@@ -107,8 +102,6 @@ public class HandleData {
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
             }
-        } else {
-            Main.getPlugin(Main.class).getLogger().warning("User already exist.");
         }
     }
 
@@ -134,8 +127,6 @@ public class HandleData {
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
             }
-        } else {
-            Main.getPlugin(Main.class).getLogger().warning("User not found!");
         }
     }
 
@@ -159,8 +150,6 @@ public class HandleData {
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
             }
-        } else {
-            Main.getPlugin(Main.class).getLogger().warning("User not found!");
         }
     }
 
@@ -184,8 +173,6 @@ public class HandleData {
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
             }
-        } else {
-            Main.getPlugin(Main.class).getLogger().warning("User not found!");
         }
     }
 }
