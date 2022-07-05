@@ -6,7 +6,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 
 public class DBConfig{
-    private static final File configFile = Main.configFile;
+    private static final File configFile = new File(Main.getPlugin(Main.class).getDataFolder(), "dbconfig.yml");
     public static final YamlConfiguration configYaml = YamlConfiguration.loadConfiguration(configFile);
 
     public static boolean isDevMode() {
