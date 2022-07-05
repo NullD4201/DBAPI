@@ -29,7 +29,7 @@ public class Main extends JavaPlugin {
 
         this.dbs = new DatabaseSetting();
         try {
-            dbs.connect(DBType.DEV);
+            dbs.connect();
         } catch (ClassNotFoundException | SQLException e) {
             getLogger().warning("Database not connected.");
             e.printStackTrace();
